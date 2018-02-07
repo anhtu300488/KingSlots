@@ -710,7 +710,7 @@ var NetworkManager = {
             if(window.ws.readyState == WebSocket.OPEN) {
                 //== show loading
                 if(typeof mid !== 'undefined' && mid !== NetworkManager.MESSAGE_ID.INITIALIZE &&
-                    mid !== NetworkManager.MESSAGE_ID.PING){
+                    mid !== NetworkManager.MESSAGE_ID.PING && mid !== NetworkManager.MESSAGE_ID.JAR){
                     cc.log("shot loading mid:", mid);
                     self.showLoading();
                 }

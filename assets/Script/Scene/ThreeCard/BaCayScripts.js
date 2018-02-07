@@ -476,9 +476,10 @@ var BacaySence = cc.Class({
             }
         }
 
-        if (response.hasMessage() && !response.getMessage()) {
-            this.showToast(response.getMessage(), this);
-        }
+        // if (response.hasMessage() && !response.getMessage()) {
+        //     cc.log("mess =", response.getMessage());
+        //     this.showToast(response.getMessage(), this, 2);
+        // }
 
         this.isRequestJar = false;
     },

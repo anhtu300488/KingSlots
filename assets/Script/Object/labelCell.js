@@ -4,6 +4,14 @@ cc.Class({
 
     properties: {
         prefabData: cc.Prefab,
+        txtData1: cc.Label,
+        txtData2: cc.Label,
+        txtData3: cc.Label,
+        txtData4: cc.Label,
+        txtData5: cc.Label,
+        txtData6: cc.Label,
+        txtData7: cc.Label,
+        txtData8: cc.Label,
         card: cc.Mask
     },
 
@@ -34,22 +42,21 @@ cc.Class({
             lengthData = lengthData-1;
         }
 
-        var nodeBg = new cc.Node();
-        nodeBg.parent = this.node;
-        var bgCell = nodeBg.addComponent(cc.Sprite);
-        var url = "resources/common/popup/popup_ingame/popup_gold_noidung_big.png";
-        var image = cc.url.raw(url);
-        var texture = cc.textureCache.addImage(image);
-        bgCell.spriteFrame = new cc.SpriteFrame(texture);
-        bgCell.node.setContentSize(800, 78);
+        // var nodeBg = new cc.Node();
+        // nodeBg.parent = this.node;
+        // var bgCell = nodeBg.addComponent(cc.Sprite);
+        // var url = "resources/common/popup/popup_ingame/popup_gold_noidung_big.png";
+        // var image = cc.url.raw(url);
+        // var texture = cc.textureCache.addImage(image);
+        // bgCell.spriteFrame = new cc.SpriteFrame(texture);
+        // bgCell.node.setContentSize(758, 78);
 
         var percentCell = [0.3, 0.15, 0.15, 0.15, 0.25];
         for(var i = 0; i < lengthData; i++){
             var strTime = obj[Object.keys(obj)[i]].toString();
-            // if(i === 0){
-            //     var txt = strTime.split(' ');
-            //     strTime = txt.join("%0D%0A");
-            // }
+            if(i === 0){
+                strTime = Common.wordWrap(strTime, 40);
+            }
 
             var nodeChild = new cc.Node();
             nodeChild.parent = this.node;
@@ -58,7 +65,6 @@ cc.Class({
             message.node.setPositionX(posX);
             message.node.color = cc.color(112,48,22,255);
             message.fontSize = 20;
-            // message.string = Common.wordWrap(strTime, 40);
             message.string = strTime;
         }
 
