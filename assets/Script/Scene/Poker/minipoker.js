@@ -31,7 +31,8 @@ var MiniPoker = cc.Class({
         jarMoney: cc.Label,
         isRequestJar: false,
         jarValue: 0,
-        roomIndex: 0
+        roomIndex: 0,
+        popupPrefab: cc.Prefab,
     },
     statics: {
       instance: null
@@ -379,10 +380,17 @@ var MiniPoker = cc.Class({
 
     calculateTurnType: function() {
         return this.getKeyBet() + 1;
+    },
+
+    showPopup: function () {
+
+        var tabString = ["Lịch sử quay", "Top cao thủ", "Lịch sử nổ hũ"];
+        var nodeChild = new cc.Node();
+        nodeChild.parent = this.node;
+        var item = cc.instantiate(this.popupPrefab);
+        item.getComponent('PopupFull').init(tabString, "history", this);
+        item.getComponent('Popup').appear();
+        nodeChild.addChild(item);
+
     }
-
-    // called every frame, uncomment this function to activate update callback
-    // update: function (dt) {
-
-    // },
 });

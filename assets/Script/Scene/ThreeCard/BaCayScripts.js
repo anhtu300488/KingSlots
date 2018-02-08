@@ -52,6 +52,7 @@ var BacaySence = cc.Class({
         setInterval(function() {
             this.requestJar();
         }.bind(this), 5000);
+        Common.setMiniThreeCardsSceneInstance(cc.director.getScene());
     },
 
     initFirstCard: function() {
