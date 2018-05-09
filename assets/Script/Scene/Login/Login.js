@@ -9,9 +9,9 @@ cc.Class({
         edt_password: cc.EditBox,
         toastPrefab: cc.Prefab,
         messagePopup: cc.Prefab,
-        bar_top_login : cc.Node,
-        bar_top_lobby : cc.Node,
-        popup_setting : cc.Node,
+        bar_top_login: cc.Node,
+        bar_top_lobby: cc.Node,
+        popup_setting: cc.Node,
         list_frame: [cc.SpriteFrame],
         musicBtn: cc.Button,
         soundBtn: cc.Button,
@@ -23,9 +23,9 @@ cc.Class({
         Common.setFingerprint();
         this.isLoadScene = false;
 
-        if(cc.sys.isNative)
+        if (cc.sys.isNative)
             sdkbox.PluginFacebook.init();
-        if(window.loginSuccess !== null && window.loginSuccess) {
+        if (window.loginSuccess !== null && window.loginSuccess) {
             this.bar_top_login.active = false;
             this.bar_top_lobby.active = true;
         } else {
@@ -36,19 +36,19 @@ cc.Class({
         var musicStatus = Common.getPrefs(Config.prefKey.MUSIC);
         var soundStatus = Common.getPrefs(Config.prefKey.SOUND);
         var vibrateStatus = Common.getPrefs(Config.prefKey.VIBARTE);
-        if(musicStatus === "true"){
+        if (musicStatus === "true") {
             this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
         } else {
             this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
         }
 
-        if(soundStatus === "true"){
+        if (soundStatus === "true") {
             this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
         } else {
             this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
         }
 
-        if(vibrateStatus === "true"){
+        if (vibrateStatus === "true") {
             this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
         } else {
             this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
@@ -56,32 +56,32 @@ cc.Class({
 
     },
 
-    start : function () {
-        if(this.edt_username != null && this.edt_password != null){
+    start: function () {
+        if (this.edt_username != null && this.edt_password != null) {
             var user_name_text = cc.sys.localStorage.getItem("user_name");
             var user_pass_text = cc.sys.localStorage.getItem("user_password");
-            if(user_name_text != null && user_pass_text != null){
+            if (user_name_text != null && user_pass_text != null) {
                 this.edt_username.string = user_name_text;
                 this.edt_password.string = user_pass_text;
             }
         }
     },
 
-    ongamestatus: function(event) {
-        if(event.data!==null || typeof(event.data) !== 'undefined') {
+    ongamestatus: function (event) {
+        if (event.data !== null || typeof(event.data) !== 'undefined') {
             var lstMessage = NetworkManager.parseFrom(event.data, event.data.byteLength);
-            if(lstMessage.length > 0) {
+            if (lstMessage.length > 0) {
                 var buffer = lstMessage.shift();
                 this.handleMessage(buffer);
             }
         }
     },
 
-    assetConfigResponseHandler: function(resp) {
+    assetConfigResponseHandler: function (resp) {
         cc.log("asset config response handler:", resp.toObject());
-        if(resp.getResponsecode()) {
+        if (resp.getResponsecode()) {
             Common.assetsConfigList = [];
-            resp.getAssetsList().forEach(function(asset) {
+            resp.getAssetsList().forEach(function (asset) {
                 var obj = {};
                 obj.assetid = asset.getAssetid();
                 obj.type = asset.getType();
@@ -97,23 +97,23 @@ cc.Class({
 
         }
 
-        if(resp.hasMessage() && resp.getMessage() !== "") {
+        if (resp.hasMessage() && resp.getMessage() !== "") {
             Common.showToast(resp.getMessage());
         }
     },
 
-    cardConfigResponseHandler: function(resp) {
+    cardConfigResponseHandler: function (resp) {
         cc.log("card config response handler:", resp.toObject());
-        if(resp.getResponsecode()) {
+        if (resp.getResponsecode()) {
             Common.providerLists = [];
-            for(var i = 0; i < resp.getProvidersList().length; i++) {
+            for (var i = 0; i < resp.getProvidersList().length; i++) {
                 var obj = {};
                 var provider = resp.getProvidersList()[i];
                 obj.providerid = provider.getProviderid();
                 obj.providercode = provider.getProvidercode();
                 obj.providername = provider.getProvidername();
                 obj.productsList = [];
-                for(var j = 0; j < provider.getProductsList().length; j++) {
+                for (var j = 0; j < provider.getProductsList().length; j++) {
                     var product = provider.getProductsList()[j];
                     var obj_product = {};
                     obj_product.productid = product.getProductid();
@@ -126,30 +126,30 @@ cc.Class({
                 Common.providerLists.push(obj);
             }
         }
-        if(resp.hasMessage() && resp.getMessage() !== "") {
+        if (resp.hasMessage() && resp.getMessage() !== "") {
             Common.showToast(resp.getMessage());
         }
     },
-    smsConfigResponseHandler: function(resp) {
+    smsConfigResponseHandler: function (resp) {
         cc.log("sms config response handler:", resp.toObject());
 
-        if(resp.getResponsecode()) {
+        if (resp.getResponsecode()) {
             Common.smsConfigLists = [];
-            for(var i = 0; i < resp.getNumbersList().length; i++) {
+            for (var i = 0; i < resp.getNumbersList().length; i++) {
                 var obj = {};
                 var smsNumber = resp.getNumbersList()[i];
                 obj.number = smsNumber.getNumber();
                 obj.samesyntax = smsNumber.getSamesyntax();
                 obj.dayquota = smsNumber.getDayquota();
                 obj.providersList = [];
-                for(var j = 0; j < smsNumber.getProvidersList().length; j++) {
+                for (var j = 0; j < smsNumber.getProvidersList().length; j++) {
                     var obj_provider = {};
                     var provider = smsNumber.getProvidersList()[j];
                     obj_provider.providerid = provider.getProviderid();
                     obj_provider.providercode = provider.getProvidercode();
                     obj_provider.providername = provider.getProvidername();
                     obj_provider.syntaxesList = [];
-                    for(var k = 0; k < provider.getSyntaxesList().length; k++) {
+                    for (var k = 0; k < provider.getSyntaxesList().length; k++) {
                         var obj_syntax = {};
                         var syntax = provider.getSyntaxesList()[k];
                         obj_syntax.syntaxid = syntax.getSyntaxid();
@@ -166,36 +166,36 @@ cc.Class({
             }
         }
 
-        if(resp.hasMessage() && resp.getMessage() !== "") {
+        if (resp.hasMessage() && resp.getMessage() !== "") {
             Common.showToast(resp.getMessage());
         }
     },
-    jarResponseHandler: function(resp) {
+    jarResponseHandler: function (resp) {
         cc.log("jar response handler:", resp.toObject());
-        if(resp.getResponsecode()) {
-            if(resp.getJarinfoList().length > 0) {
+        if (resp.getResponsecode()) {
+            if (resp.getJarinfoList().length > 0) {
                 // first time request
                 window.jarInfoList = resp.getJarinfoList();
             }
         }
     },
-    paymentStatusResponseHandler: function(resp) {
+    paymentStatusResponseHandler: function (resp) {
         cc.log("payment status response handler:", resp.toObject());
-        if(resp.getResponsecode()) {
+        if (resp.getResponsecode()) {
             Common.setEnableCashToGold(resp.getEnablecashtogold());
             Common.setEnableCashTransfer(resp.getEnablecashtransfer());
             Common.setEnableGiftCode(resp.getEnablegiftcode());
             Common.setEnablePurchaseCash(resp.getEnablepurchasecash());
             Common.setEnableTopup(resp.getEnabletopup());
         }
-        if(resp.hasMessage() && resp.getMessage() !== "") {
+        if (resp.hasMessage() && resp.getMessage() !== "") {
             Common.showToast(resp.hasMessage(), 2);
         }
     },
-    handleMessage: function(e) {
+    handleMessage: function (e) {
         const buffer = e;
         var isDone = this._super(buffer);
-        if(isDone) {
+        if (isDone) {
             return true;
         }
         isDone = true;
@@ -225,17 +225,17 @@ cc.Class({
         }
         return isDone;
     },
-    checkPurchaseList: function() {
+    checkPurchaseList: function () {
         return (Common.assetsConfigList !== null && Common.smsConfigLists !== null
             && Common.providerLists !== null && window.jarInfoList !== null && window.loginSuccess === true);
     },
 
-    onGameEvent: function() {
+    onGameEvent: function () {
         var self = this;
-        NetworkManager.checkEvent(function(buffer) {
+        NetworkManager.checkEvent(function (buffer) {
             return self.handleMessage(buffer);
         });
-        if(this.checkPurchaseList() && !this.isLoadScene) {
+        if (this.checkPurchaseList() && !this.isLoadScene) {
             this.isLoadScene = true;
 
             this.bar_top_login.active = false;
@@ -243,21 +243,21 @@ cc.Class({
         }
 
     },
-    update: function(dt) {
+    update: function (dt) {
         this.onGameEvent();
     },
 
-    handleLoginResponseHandler: function(res) {
+    handleLoginResponseHandler: function (res) {
         cc.log("login response handler:", res.toObject());
         window.loginMessage = null;
-        if(res.getResponsecode()) {
+        if (res.getResponsecode()) {
             var session_id = res.getSessionid();
             Common.setSessionId(session_id);
             Common.setUserInfo(res.getUserinfo().toObject());
             cc.sys.localStorage.setItem("session_id", session_id);
 
-            cc.sys.localStorage.setItem("user_name",this.edt_username.string);
-            cc.sys.localStorage.setItem("user_password",this.edt_password.string);
+            cc.sys.localStorage.setItem("user_name", this.edt_username.string);
+            cc.sys.localStorage.setItem("user_password", this.edt_password.string);
             window.loginSuccess = true;
             window.isLogout = false;
 
@@ -276,30 +276,30 @@ cc.Class({
                 Common.setEnableNotification(res.getEnablenotification());
             }
 
-            if(res.hasEnabletx()){
+            if (res.hasEnabletx()) {
                 Common.setEnableTaixiu(res.getEnabletx());
             }
 
-            if (res.hasNoticetext()){
+            if (res.hasNoticetext()) {
                 Common.setNoticeText(res.getNoticetext());
             }
 
-            if(res.hasMessage() && res.getMessage() !== "") {
+            if (res.hasMessage() && res.getMessage() !== "") {
                 window.loginMessage = res.getMessage();
             }
             // cc.director.loadScene('Lobby');
-            if(Common.providerLists === null)
+            if (Common.providerLists === null)
                 NetworkManager.getCardConfigRequest(Config.CARD_CONFIG_TYPE.TYPE_CASH);
-            if(Common.smsConfigLists === null)
+            if (Common.smsConfigLists === null)
                 NetworkManager.requestSmsConfigMessage(1);
-            if(Common.assetsConfigList === null) {
+            if (Common.assetsConfigList === null) {
                 NetworkManager.requestAssetsConfigMessage(1);
             }
         }
 
-        if(res.hasMessage() && res.getMessage() !== "") {
-            Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-                message_box.init(res.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function() {
+        if (res.hasMessage() && res.getMessage() !== "") {
+            Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function (message_box) {
+                message_box.init(res.getMessage(), Config.COMMON_POPUP_TYPE.MESSAGE_BOX.CONFIRM_TYPE, function () {
                     cc.log("call back");
                 });
                 message_box.appear();
@@ -320,32 +320,32 @@ cc.Class({
     //         }
     //     }
     // },
-    goIntroScene: function(e) {
+    goIntroScene: function (e) {
         cc.director.loadScene("Intro");
     },
 
-    login: function() {
+    login: function () {
         cc.log("do login");
         var username = this.edt_username.string;
         var password = this.edt_password.string;
 
-        if(username === "" || password === "") {
-            Common.showToast(Common.KEYTEXT.BLANK_USERNAME,1);
+        if (username === "" || password === "") {
+            Common.showToast(Common.KEYTEXT.BLANK_USERNAME, 1);
             return;
         }
 
-        if(Common.isWhiteSpaceText(username)) {
-            Common.showToast(Common.KEYTEXT.TXT_REMIND2,1);
+        if (Common.isWhiteSpaceText(username)) {
+            Common.showToast(Common.KEYTEXT.TXT_REMIND2, 1);
             return;
         }
 
-        if(username.length < 3 || username.length > 12){
-            Common.showToast(Common.KEYTEXT.TXT_REMIND4,1);
+        if (username.length < 3 || username.length > 12) {
+            Common.showToast(Common.KEYTEXT.TXT_REMIND4, 1);
             return;
         }
 
-        if(username.length < 6 || username.length > 12){
-            Common.showToast(Common.KEYTEXT.TXT_REMIND5,1);
+        if (username.length < 6 || username.length > 12) {
+            Common.showToast(Common.KEYTEXT.TXT_REMIND5, 1);
             return;
         }
 
@@ -353,7 +353,7 @@ cc.Class({
     },
 
     showPopupRegister: function () {
-        Common.showPopup(Config.name.POPUP_REGISTER,function(popup) {
+        Common.showPopup(Config.name.POPUP_REGISTER, function (popup) {
             popup.appear();
         });
     },
@@ -362,19 +362,19 @@ cc.Class({
         if(cc.sys.platform == cc.sys.isNative) {
             cc.log("login facebook native");
             sdkbox.PluginFacebook.login();
-        }else if(cc.sys.isBrowser){
-            window.loginFb(["public_profile"], function(code, response){
-                if(code === 0){
+        } else if (cc.sys.isBrowser) {
+            window.loginFb(["public_profile"], function (code, response) {
+                if (code === 0) {
                     cc.log("login succeeded", response);
                     var userID = response.userID;
                     var accessToken = response.accessToken;
-                    console.log(userID,accessToken);
+                    console.log(userID, accessToken);
 
                     if (accessToken !== null) {
                         NetworkManager.getOpenIdLoginMessageFromServer(
                             Common.FACEBOOK_CHANNEL, userID + ";" + accessToken, "", "");
 
-                    }else {
+                    } else {
                         this.loginFacebook();
                     }
 
@@ -384,12 +384,12 @@ cc.Class({
             });
         }
     },
-    loginGoogle: function() {
-        Common.showPopup(Config.name.POPUP_HISTORY,function(popup) {
+    loginGoogle: function () {
+        Common.showPopup(Config.name.POPUP_HISTORY, function (popup) {
             popup.appear();
         });
     },
-    saveUserInfo: function(userInfo) {
+    saveUserInfo: function (userInfo) {
         Common.setUserName(userInfo.getUsername());
         if (userInfo.hasDisplayname()) {
             Common.setDisplayName(userInfo.getDisplayname());
@@ -407,23 +407,23 @@ cc.Class({
             Common.setAvatarId(userInfo.getAvatarid());
         }
 
-        if (userInfo.hasMobile()){
+        if (userInfo.hasMobile()) {
             Common.setPhoneNunber(userInfo.getMobile());
         }
 
-        if (userInfo.hasAccountverified()){
+        if (userInfo.hasAccountverified()) {
             Common.setAccountVerify(userInfo.getAccountverified());
         }
 
-        if (userInfo.hasDisablecashtransaction()){
+        if (userInfo.hasDisablecashtransaction()) {
             Common.setDisableCashTransaction(userInfo.getDisablecashtransaction());
         }
 
-        if (userInfo.hasSecuritykeyset()){
+        if (userInfo.hasSecuritykeyset()) {
             Common.setSecurityKeySeted(userInfo.getSecuritykeyset());
         }
     },
-    saveUserSetting: function(userSetting) {
+    saveUserSetting: function (userSetting) {
         if (userSetting.hasAutoready()) {
             Common.setAutoReady(userSetting.getAutoready());
             cc.sys.localStorage.setItem("AUTOREADY", userSetting.getAutoready());
@@ -435,7 +435,7 @@ cc.Class({
         }
     },
     settingClick: function () {
-        if(this.isSetting === false){
+        if (this.isSetting === false) {
             this.popup_setting.active = true;
         } else {
             this.popup_setting.active = false;
@@ -446,17 +446,16 @@ cc.Class({
         Common.openIdConnectRequest(Common.FACEBOOK_CHANNEL);
     },
 
-    onClickExit: function(){
+    onClickExit: function () {
 
-        Common.showPopup(Config.name.POPUP_MESSAGE_BOX,function(message_box) {
-            message_box.init(Common.KEYTEXT.MSG_LOG_OUT, Config.COMMON_POPUP_TYPE.MESSAGE_BOX.MESSAGEBOX_TYPE, function() {
+        Common.showPopup(Config.name.POPUP_MESSAGE_BOX, function (message_box) {
+            message_box.init(Common.KEYTEXT.MSG_LOG_OUT, Config.COMMON_POPUP_TYPE.MESSAGE_BOX.MESSAGEBOX_TYPE, function () {
                 window.isLogout = true;
                 NetworkManager.getLogoutMessageFromServer(true);
             });
             message_box.appear();
         });
     },
-
 
 
     musicClick: function () {
@@ -471,24 +470,24 @@ cc.Class({
         this.changeOnOffSetting(Config.prefKey.VIBARTE);
     },
 
-    changeOnOffSetting: function(pkey) {
-        if (Common.getPrefs(pkey) === 'true'){
+    changeOnOffSetting: function (pkey) {
+        if (Common.getPrefs(pkey) === 'true') {
             Common.setPrefs(pkey, false);
-            if(pkey === Config.prefKey.MUSIC){
+            if (pkey === Config.prefKey.MUSIC) {
                 this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
-            } else if(pkey === Config.prefKey.SOUND){
+            } else if (pkey === Config.prefKey.SOUND) {
                 this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
-            } else if(pkey === Config.prefKey.VIBARTE){
+            } else if (pkey === Config.prefKey.VIBARTE) {
                 this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[0];
             }
         }
         else {
             Common.setPrefs(pkey, true);
-            if(pkey === Config.prefKey.MUSIC){
+            if (pkey === Config.prefKey.MUSIC) {
                 this.musicBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
-            } else if(pkey === Config.prefKey.SOUND){
+            } else if (pkey === Config.prefKey.SOUND) {
                 this.soundBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
-            } else if(pkey === Config.prefKey.VIBARTE){
+            } else if (pkey === Config.prefKey.VIBARTE) {
                 this.vibrateBtn.getComponent(cc.Sprite).spriteFrame = this.list_frame[1];
             }
         }
@@ -498,7 +497,7 @@ cc.Class({
             if(Common.enableGiftCode)
             var tabString = ["Nhập giftcode", "Giftcode đã nhận"];
 
-            Common.showPopup(Config.name.POPUP_GIFT,function(popup) {
+            Common.showPopup(Config.name.POPUP_GIFT, function (popup) {
                 popup.addTabs(tabString, 1);
                 popup.appear();
             });
@@ -521,7 +520,7 @@ cc.Class({
             Common.showToast("Bạn cần đăng nhập để thực hiện chức năng này", 2);
         }
     },
-    openFriendPopup: function() {
+    openFriendPopup: function () {
         Common.showToast("Chức năng này đang cập nhật, vui lòng thử lại!", 2);
     },
 });
